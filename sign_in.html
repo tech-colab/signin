@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="sign_in.css">
+
+	<!DOCTYPE html>
+	<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="sign_in.css">
+		<title>Document</title>
+	</head>
+
+<body>
+
+	<nav class="nav_container">
+		<div class="logo">
+			<a href="index.html" style="cursor: pointer;">
+				<img src="logo_google.svg" alt="Logo">
+			</a>
+		</div>
+
+		<div class="connexion">
+			<div class="custom-select">
+				<select id="language">
+					<option value="fr">🇫🇷 Français</option>
+					<option value="en">🇬🇧 English</option>
+					<option value="ar">🇩🇿 عربي</option>
+				</select>
+			</div>
+		</div>
+
+	</nav>
+
+	<div class="container sign-in">
+		<!-- FORM SECTION -->
+		<div class="row">
+
+			<!-- SIGN IN -->
+			<div class="col align-items-center flex-col sign-in">
+				<div class="form-wrapper align-items-center">
+					<div class="form sign-in">
+						<div class="input-group">
+							<i class='bx bxs-user'></i>
+							<input data-translate="greeting1" type="text" placeholder="Nom d'utilisateur">
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input type="password" data-translate="greeting2" placeholder="Mot de passe">
+						</div>
+						<button data-translate="greeting4">
+							Se connecter
+						</button>
+						<p>
+							<b data-translate="greeting4">
+								Mot de passe oublié ?
+							</b>
+						</p>
+						<p>
+							<span data-translate="greeting5">
+								Vous n'avez pas de compte?
+							</span>
+							<a href="sign_up.html" style="text-decoration: none;color: black;">
+								<b class="pointer" data-translate="greeting6">
+									Inscrivez-vous !
+								</b>
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="form-wrapper">
+
+				</div>
+			</div>
+			<!-- END SIGN IN -->
+		</div>
+		<!-- END FORM SECTION -->
+		<!-- CONTENT SECTION -->
+
+		<!-- END CONTENT SECTION -->
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			// Function to change placeholder based on language
+			function changePlaceholders(language) {
+				const inputElements = document.querySelectorAll("[data-translate]");
+
+				inputElements.forEach((inputElement) => {
+					const translationKey = inputElement.getAttribute("data-translate");
+
+					// Language data
+					const languageData = {
+						fr: {
+							greeting1: "Nom d'utilisateur",
+							greeting2: "mot de passe ",
+
+						},
+						ar: {
+							greeting1: "إسم المستخدم",
+							greeting2: "كلمة السر",
+
+						},
+						en: {
+							greeting1: "username",
+							greeting2: "password",
+
+						},
+						// Add more languages and translations as needed
+					};
+
+					// Update placeholder based on selected language
+					if (languageData[language] && languageData[language][translationKey]) {
+						inputElement.placeholder = languageData[language][translationKey];
+					} else {
+						inputElement.placeholder = ""; // Default to empty placeholder if translation is not found
+					}
+				});
+			}
+
+			// Function to get the selected language from local storage or default to a specific language
+			function getSelectedLanguage() {
+				const selectedLanguage = localStorage.getItem("selectedLanguage");
+				return selectedLanguage || "en"; // Default to English if no language is found in local storage
+			}
+			const languageSelector = document.querySelector(".custom-select");
+			if (languageSelector) {
+				const languages = Array.from(
+					document.querySelectorAll(".custom-select option")
+				).map((option) => option.value);
+				if (languages.length === 1) {
+					const languageCode = languages[0];
+					changePlaceholders(languageCode); // Apply the language automatically
+				}
+			}
+
+			// Event listener for language change
+
+
+			//   const languageDropdown = document.getElementById("language");
+			if (document.getElementById("language") != null) {
+				const languageDropdown = document.getElementById("language")
+				languageDropdown.addEventListener("change", function () {
+					const selectedLanguage = this.value;
+					changePlaceholders(selectedLanguage);
+					// Save the selected language in local storage
+					localStorage.setItem("selectedLanguage", selectedLanguage);
+				});
+
+				// Initial load
+
+				const selectedLanguage = getSelectedLanguage();
+				languageDropdown.value = selectedLanguage;
+				changePlaceholders(selectedLanguage);
+			} else {
+				const languageSelector = document.getElementsByClassName("lang-menu");
+				console.log("languageSelector++ ", languageSelector[0].innerText)
+				if (languageSelector.length === 1) {
+					changePlaceholders(languageSelector); // Apply the language automatically
+				}
+				const selectedLanguage = getSelectedLanguage();
+				languageSelector.value = selectedLanguage;
+				changePlaceholders(selectedLanguage);
+
+			}
+		});
+
+	</script>
+
+	<script>
+
+		// Language data
+		const languageData = {
+						fr: {
+							greeting3: "Se connecter",
+							greeting4: "Mot de passe oublié ? ",
+							greeting5: "Vous n'avez pas de compte !",
+							greeting6: " Inscrivez-vous ? ",
+
+
+						},
+						ar: {
+							greeting3: " تواصل",
+							greeting4: "نسيت كلمة السر ؟ ",
+							greeting5: "لا يوجد لديك حساب !",
+							greeting6: "يسجل؟",
+
+						},
+						en: {
+							greeting3: "connect",
+							greeting4: "Forgot your password ?",
+							greeting5: "You do not have an account ! ",
+							greeting6: "Register?",
+
+						},
+						// Add more languages and translations as needed
+					};
+		// Function to change language
+		function changeLanguage(selectedLanguage) {
+			// Show loader
+			// document.getElementById("loader-container").style.opacity = "1";
+			// document.getElementById("loader-container").style.display = "block";
+
+			const elementsToTranslate = document.querySelectorAll("[data-translate]");
+
+			elementsToTranslate.forEach((element) => {
+				const key = element.getAttribute("data-translate");
+				element.textContent = languageData[selectedLanguage][key];
+			});
+
+			// Save the selected language in local storage
+			localStorage.setItem("selectedLanguage", selectedLanguage);
+			// if (selectedLanguage === "ar") {
+			//   localStorage.setItem("languageDirection", "rtl");
+			// } else {
+			//   localStorage.removeItem("languageDirection");
+			// }
+
+			// setTimeout(() => {
+			// 	document.getElementById("loader-container").style.opacity = "0";
+			// 	document.getElementById("loader-container").style.display = "none";
+			// }, 500);
+		}
+
+		// Function to get the language preference from local storage or default to the first language
+		function getSavedLanguage() {
+			const savedLanguage = localStorage.getItem("selectedLanguage");
+			// console.log("savedLanguage++++ ",savedLanguage)
+			if (savedLanguage === "ar") {
+				document.documentElement.classList.add("translate_direction");
+			} else {
+				document.documentElement.classList.remove("translate_direction");
+			}
+			return savedLanguage || "fr";
+		}
+
+		// Initial load
+		const selectedLanguage = getSavedLanguage();
+		changeLanguage(selectedLanguage); // Call changeLanguage to set the initial language
+
+		// If there's only one language available, display it directly without a dropdown
+		const languageSelector = document.querySelector(".custom-select");
+		if (languageSelector) {
+			const languages = Array.from(document.querySelectorAll(".custom-select option")).map(option => option.value);
+			if (languages.length === 1) {
+				const languageCode = languages[0];
+				changeLanguage(languageCode); // Apply the language automatically
+				if (languageCode == "ar") {
+					languageSelector.innerHTML = '🇩🇿 عربي';
+					document.body.setAttribute("dir", "rtl");
+				} else if (languageCode == "fr") {
+					languageSelector.innerHTML = '🇫🇷 Français';
+				} else {
+					languageSelector.innerHTML = '🇬🇧 English';
+				}
+				// languageSelector.innerHTML=languageCode
+				languageSelector.style.cursor = "default";
+				languageSelector.style.fontWeight = "600";
+			}
+		}
+
+		// Event listener for language change
+		const languageDropdown = document.getElementById("language");
+		languageDropdown.addEventListener("change", () => {
+			const selectedLanguage = languageDropdown.value;
+			console.log("selectedLanguage hadi fel change ", selectedLanguage)
+			const savedLanguage = localStorage.getItem("selectedLanguage");
+
+			if (languageDropdown.length > 1) {
+				if (selectedLanguage === "ar") {
+					document.documentElement.classList.add("translate_direction");
+					console.log("savedLanguage++ ", savedLanguage)
+				} else {
+					document.documentElement.classList.remove("translate_direction");
+				}
+			}
+			setTimeout(() => {
+				changeLanguage(selectedLanguage);
+			}, 0);
+		});
+
+		// Event listener for language change
+		// const languageDropdown = document.getElementById("language");
+		// languageDropdown.addEventListener("change", () => {
+		//   setTimeout(() => {
+		//     changeLanguage(languageDropdown.value);
+		//   }, 0);
+		// });
+	</script>
+
+</body>
+
+</html>
