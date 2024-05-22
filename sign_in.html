@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="sign_in.css">
-	<title data-translate="greeting7">Document</title>
+	<title data-translate="greeting3">Document</title>
 </head>
 
 <body>
@@ -18,7 +18,7 @@
 		</div>
 
 		<div class="connexion">
-			<div class="custom-select">
+			<div class="custom-select" style="pointer-events: none;">
 				<select id="language">
 					<option value="fr">🇫🇷 Français</option>
 					<option value="en">🇬🇧 English</option>
@@ -36,16 +36,21 @@
 			<!-- SIGN IN -->
 			<div class="col align-items-center flex-col sign-in">
 				<div class="form-wrapper align-items-center">
-					<div class="form sign-in">
+					<form class="form sign-in">
 						<div class="input-group">
 							<i class='bx bxs-user'></i>
 							<input data-translate="greeting1" type="text" placeholder="Nom d'utilisateur">
+							<div id="errors" class="span-title">
+								{% csrf_token %} {% if form.errors %}
+								<div style="color: red;" data-translate="greeting14">username or password incorrect.</div>
+								{% endif %}  
+							</div>
 						</div>
 						<div class="input-group">
 							<i class='bx bxs-lock-alt'></i>
 							<input type="password" data-translate="greeting2" placeholder="Mot de passe">
 						</div>
-						<button data-translate="greeting4">
+						<button data-translate="greeting3">
 							Se connecter
 						</button>
 						<p>
@@ -63,7 +68,7 @@
 								</b>
 							</a>
 						</p>
-					</div>
+					</form>
 				</div>
 				<div class="form-wrapper">
 
@@ -117,7 +122,30 @@
 
 			// Function to get the selected language from local storage or default to a specific language
 			function getSelectedLanguage() {
-				const selectedLanguage = localStorage.getItem("selectedLanguage");
+				// var url = 'https://api.kio.technology/connect/login/?next=/connect/o/authorize/%3Fresponse_type%3Dcode%26client_id%3DUWLszqr5ouqcnUTMQH5DjcCrEmuG8mgnlINogxZn%26redirect_uri%3Dhttps%3A//pre-imo-lang.mykio.shop/signin%26lang%3D/auto/en';
+				var url = window.location.href;
+				console.log("url  ",url);
+
+				// Define a regular expression pattern to match the language part of the path
+				var pattern = /\/auto\/([a-zA-Z]+)/;
+
+				// Execute the regular expression pattern against the URL
+				var match = url.match(pattern);
+				console.log(match);
+
+				// Check if a match is found and extract the language if so
+				var lang = match ? match[1] : "fr";
+				if (lang === "ar") {
+					document.documentElement.classList.add("translate_direction");
+
+				} else {
+					document.documentElement.classList.remove("translate_direction");
+				}
+
+				console.log("lang: ", lang); // Output: fr
+
+				const selectedLanguage = lang;
+			// const savedLanguage = localStorage.getItem("selectedLanguage");
 				return selectedLanguage || "en"; // Default to English if no language is found in local storage
 			}
 			const languageSelector = document.querySelector(".custom-select");
@@ -168,30 +196,33 @@
 
 		// Language data
 		const languageData = {
-						fr: {
-							greeting3: "Se connecter",
-							greeting4: "Mot de passe oublié ? ",
-							greeting5: "Vous n'avez pas de compte !",
-							greeting6: " Inscrivez-vous ? ",
-							greeting7: "s'inscrire",
-						},
-						ar: {
-							greeting3: " تواصل",
-							greeting4: "نسيت كلمة السر ؟ ",
-							greeting5: "لا يوجد لديك حساب !",
-							greeting6: "يسجل؟",
-							greeting7: "اشتراك",
+			fr: {
+				greeting3: "Se connecter",
+				greeting4: "Mot de passe oublié ? ",
+				greeting5: "Vous n'avez pas de compte !",
+				greeting6: " Inscrivez-vous ? ",
+				greeting7: "s'inscrire",
+				greeting14: "Nom d'utilisateur ou mot de passe incorrect."
+			},
+			ar: {
+				greeting3: " تواصل",
+				greeting4: "نسيت كلمة السر ؟ ",
+				greeting5: "لا يوجد لديك حساب !",
+				greeting6: "يسجل؟",
+				greeting7: "اشتراك",
+				greeting14: "اسم المستخدم او كلمة السر غير صحيحة."
+			},
+			en: {
+				greeting3: "connect",
+				greeting4: "Forgot your password ?",
+				greeting5: "You do not have an account ! ",
+				greeting6: "Register?",
+				greeting7: "Sign-up",
+				greeting14: "username or password incorrect."
 
-						},
-						en: {
-							greeting3: "connect",
-							greeting4: "Forgot your password ?",
-							greeting5: "You do not have an account ! ",
-							greeting6: "Register?",
-							greeting7: "Sign-up",
-						},
-						// Add more languages and translations as needed
-					};
+			},
+			// Add more languages and translations as needed
+		};
 		// Function to change language
 		function changeLanguage(selectedLanguage) {
 			// Show loader
@@ -221,12 +252,45 @@
 
 		// Function to get the language preference from local storage or default to the first language
 		function getSavedLanguage() {
-			const savedLanguage = localStorage.getItem("selectedLanguage");
-			// console.log("savedLanguage++++ ",savedLanguage)
-			if (savedLanguage === "ar") {
-				document.documentElement.classList.add("translate_direction");
-			} else {
-				document.documentElement.classList.remove("translate_direction");
+			// var url = 'https://api.kio.technology/connect/login/?next=/connect/o/authorize/%3Fresponse_type%3Dcode%26client_id%3DUWLszqr5ouqcnUTMQH5DjcCrEmuG8mgnlINogxZn%26redirect_uri%3Dhttps%3A//pre-imo-lang.mykio.shop/signin%26lang%3D/auto/en';
+			var url = window.location.href;
+				console.log("url3  ",url);
+
+				// Define a regular expression pattern to match the language part of the path
+				var pattern = /\/auto\/([a-zA-Z]+)/;
+
+				// Execute the regular expression pattern against the URL
+				var match = url.match(pattern);
+				console.log(match);
+
+				// Check if a match is found and extract the language if so
+				var lang = match ? match[1] : "fr";
+				if (lang === "ar") {
+					document.documentElement.classList.add("translate_direction");
+
+				} else {
+					document.documentElement.classList.remove("translate_direction");
+				}
+
+				console.log("lang: ", lang); // Output: fr
+
+				const savedLanguage = lang;
+				const spanTitles = document.getElementsByClassName("span-title");
+
+			// Iterate over each element with class "span-title"
+			for (let i = 0; i < spanTitles.length; i++) {
+				const spanTitle = spanTitles[i];
+
+
+				if (savedLanguage === "ar") {
+					document.documentElement.classList.add("translate_direction");
+					spanTitle.classList.add("align-right");
+					console.log("savedLanguage++ ", savedLanguage);
+				} else {
+					document.documentElement.classList.remove("translate_direction");
+					spanTitle.classList.remove("align-right");
+				}
+
 			}
 			return savedLanguage || "fr";
 		}
@@ -262,15 +326,23 @@
 			const selectedLanguage = languageDropdown.value;
 			console.log("selectedLanguage hadi fel change ", selectedLanguage)
 			const savedLanguage = localStorage.getItem("selectedLanguage");
+			const spanTitles = document.getElementsByClassName("span-title");
 
-			if (languageDropdown.length > 1) {
-				if (selectedLanguage === "ar") {
-					document.documentElement.classList.add("translate_direction");
-					console.log("savedLanguage++ ", savedLanguage)
-				} else {
-					document.documentElement.classList.remove("translate_direction");
+			for(let i=0 ; i<spanTitles.length; i++){
+				const spanTitle = spanTitles[i];
+
+				if (languageDropdown.length > 1) {
+					if (selectedLanguage === "ar") {
+						document.documentElement.classList.add("translate_direction");
+						spanTitle.classList.add("align-right");
+						console.log("savedLanguage++ ", savedLanguage)
+					} else {
+						document.documentElement.classList.remove("translate_direction");
+						spanTitle.classList.remove("align-right");
+					}
 				}
 			}
+
 			setTimeout(() => {
 				changeLanguage(selectedLanguage);
 			}, 0);

@@ -18,13 +18,13 @@
 		</div>
 
 		<div class="connexion">
-			<div class="custom-select">
+			<div class="custom-select" style="pointer-events: none;">
 				<select id="language">
 					<option value="fr">🇫🇷 Français</option>
 					<option value="en">🇬🇧 English</option>
 					<option value="ar">🇩🇿 عربي</option>
 				</select>
-			</div>			
+			</div>
 		</div>
 
 	</nav>
@@ -33,7 +33,7 @@
 		<div class="row">
 			<!-- SIGN UP -->
 			<div class="col align-items-center flex-col sign-up">
-				<div class="form-wrapper align-items-center">
+				<form class="form-wrapper align-items-center">
 					<div class="form sign-up">
 						<div class="input-group">
 							<i class='bx bxs-user'></i>
@@ -80,7 +80,7 @@
 							</a>
 						</p>
 					</div>
-				</div>
+				</form>
 
 			</div>
 			<!-- END SIGN UP -->
@@ -145,8 +145,28 @@
 
 			// Function to get the selected language from local storage or default to a specific language
 			function getSelectedLanguage() {
-				const selectedLanguage = localStorage.getItem("selectedLanguage");
-				return selectedLanguage || "en"; // Default to English if no language is found in local storage
+				// var url = 'https://api.kio.technology/connect/login/?next=/connect/o/authorize/%3Fresponse_type%3Dcode%26client_id%3DUWLszqr5ouqcnUTMQH5DjcCrEmuG8mgnlINogxZn%26redirect_uri%3Dhttps%3A//pre-imo-lang.mykio.shop/signin%26lang%3D/auto/ar';
+				var url = window.location.href;
+				console.log("url  ", url);
+
+				// Define a regular expression pattern to match the language part of the path
+				var pattern = /\/auto\/([a-zA-Z]+)/;
+
+				// Execute the regular expression pattern against the URL
+				var match = url.match(pattern);
+				console.log(match);
+
+				// Check if a match is found and extract the language if so
+				var lang = match ? match[1] : "fr";
+				if (lang === "ar") {
+					document.documentElement.classList.add("translate_direction");
+
+				} else {
+					document.documentElement.classList.remove("translate_direction");
+				}
+
+				console.log("lang: ", lang); // Output: fr
+				return lang || "en"; // Default to English if no language is found in local storage
 			}
 			const languageSelector = document.querySelector(".custom-select");
 			if (languageSelector) {
@@ -256,23 +276,46 @@
 
 		// Function to get the language preference from local storage or default to the first language
 		function getSavedLanguage() {
-			const savedLanguage = localStorage.getItem("selectedLanguage");
+			// var url = 'https://api.kio.technology/connect/login/?next=/connect/o/authorize/%3Fresponse_type%3Dcode%26client_id%3DUWLszqr5ouqcnUTMQH5DjcCrEmuG8mgnlINogxZn%26redirect_uri%3Dhttps%3A//pre-imo-lang.mykio.shop/signin%26lang%3D/auto/ar';
+			var url = window.location.href;
+			console.log("url 2 ", url);
+
+			// Define a regular expression pattern to match the language part of the path
+			var pattern = /\/auto\/([a-zA-Z]+)/;
+
+			// Execute the regular expression pattern against the URL
+			var match = url.match(pattern);
+			console.log(match);
+
+			// Check if a match is found and extract the language if so
+			var lang = match ? match[1] : "fr";
+			if (lang === "ar") {
+				document.documentElement.classList.add("translate_direction");
+
+			} else {
+				document.documentElement.classList.remove("translate_direction");
+			}
+
+			console.log("lang: ", lang); // Output: fr
+
+			const savedLanguage = lang; 
+			
 			const spanTitles = document.getElementsByClassName("span-title");
 
 			// Iterate over each element with class "span-title"
 			for (let i = 0; i < spanTitles.length; i++) {
 				const spanTitle = spanTitles[i];
 
-				
-					if (savedLanguage === "ar") {
-						document.documentElement.classList.add("translate_direction");
-						spanTitle.classList.add("align-right");
-						console.log("savedLanguage++ ", savedLanguage);
-					} else {
-						document.documentElement.classList.remove("translate_direction");
-						spanTitle.classList.remove("align-right");
-					}
-				
+
+				if (savedLanguage === "ar") {
+					document.documentElement.classList.add("translate_direction");
+					spanTitle.classList.add("align-right");
+					console.log("savedLanguage++ ", savedLanguage);
+				} else {
+					document.documentElement.classList.remove("translate_direction");
+					spanTitle.classList.remove("align-right");
+				}
+
 			}
 			return savedLanguage || "fr";
 		}
